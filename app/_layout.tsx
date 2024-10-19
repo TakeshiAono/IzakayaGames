@@ -1,37 +1,70 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import * as React from "react";
+import { Button, Text, View } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import GameSelectScreen from "./Screens/CardGameSelectScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import TopNavigation from "./navigations/TopNavigation";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+// function HomeScreen({ navigation }) {
+//   return (
+//     <Stack.Navigator>
+//     {/* <Drawer.Screen name="Home" component={Home} />
+//     <Drawer.Screen name="Profile" component={Profile} /> */}
+//       <Stack.Screen name="SettingsScreenb" component={SettingsScreen} />
+//   </Stack.Navigator>
+//   );
+// }
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// function HomeScreen2({ navigation }) {
+//   return (
+//     <Stack.Navigator>
+//     {/* <Drawer.Screen name="Home" component={Home} />
+//     <Drawer.Screen name="Profile" component={Profile} /> */}
+//       <Stack.Screen name="SettingsScreena" component={SettingsScreena} />
+//   </Stack.Navigator>
+//   );
+// }
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+// function SettingsScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>普通の</Text>
+//       <Button onPress={() => navigation.navigate('Notifications')} title="Go back home" />
+//     </View>
+//   );
+// }
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+// function SettingsScreena({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>a</Text>
+//       <Button onPress={() => navigation.navigate('SettingsScreenb')} title="Go back home" />
+//     </View>
+//   );
+// }
 
-  if (!loaded) {
-    return null;
-  }
+// function NotificationsScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Button onPress={() => navigation.goBack()} title="Go back home" />
+//     </View>
+//   );
+// }
 
+// const Drawer = createDrawerNavigator();
+// const Stack = createNativeStackNavigator();
+
+export default function App() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    // <NavigationContainer  independent={true}>
+    //   <Drawer.Navigator initialRouteName="Home">
+    //     <Drawer.Screen name="GameSelectScreen" component={GameSelectScreen} />
+    //     <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+    //     <Drawer.Screen name="HomeScreen2" component={HomeScreen2} />
+    //     <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+    //   </Drawer.Navigator>
+    // </NavigationContainer>
+    <TopNavigation />
   );
 }

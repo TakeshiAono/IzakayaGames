@@ -1,37 +1,36 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+// import * as React from 'react';
+// import { Button, View } from 'react-native';
+// import { createDrawerNavigator } from '@react-navigation/drawer';
+// import { NavigationContainer } from '@react-navigation/native';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+// function HomeScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Button
+//         onPress={() => navigation.navigate('Notifications')}
+//         title="Go to notifications"
+//       />
+//     </View>
+//   );
+// }
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+// function NotificationsScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Button onPress={() => navigation.goBack()} title="Go back home" />
+//     </View>
+//   );
+// }
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
-}
+// const Drawer = createDrawerNavigator();
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <Drawer.Navigator initialRouteName="Home">
+//         <Drawer.Screen name="Home" component={HomeScreen} />
+//         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+//       </Drawer.Navigator>
+//     </NavigationContainer>
+//   );
+// }
