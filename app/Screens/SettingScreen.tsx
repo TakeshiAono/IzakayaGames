@@ -1,13 +1,12 @@
 import { useNavigation } from "expo-router";
 import { Button, View } from "react-native";
 
-const SettingScreen =() => {
-  const navigation = useNavigation();
+const SettingScreen = () => {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="設定をする"/>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Button title="設定をする" />
     </View>
   );
-}
+};
 
 export default SettingScreen;

@@ -8,7 +8,7 @@ export default function CardGameSelectScreen() {
   return (
     <>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <View style={{ width: 100, backgroundColor: "red" }}>
+        <View style={{ width: 100 }}>
           <Button
             title="ソリティア"
             onPress={() => {
