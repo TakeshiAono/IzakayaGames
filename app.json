@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.aono001.IzakayaGames"
     },
     "web": {
       "bundler": "metro",
@@ -29,6 +30,11 @@
     "plugins": [
       "expo-router"
     ],
+    "extra": {
+      "eas": {
+        "projectId": "3fa107bd-5b6e-47b3-8876-5b29ce719e1b"
+      }
+    },
     "experiments": {
       "typedRoutes": true
     }
