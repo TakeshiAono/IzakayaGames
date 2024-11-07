@@ -1,8 +1,6 @@
 import { Text, View } from "react-native";
 import TrumpCard from "../TrumpCard";
-import React, {
-  useRef,
-} from "react";
+import React, { useRef } from "react";
 
 type Props = {
   cards: { number: number; mark: string }[];
@@ -26,26 +24,21 @@ const TrumpColumn = ({ cards, columnIndex }: Props) => {
       >
         <Text>{columnIndex}</Text>
         {cards.map((card, index) => {
-          return (
-            <View
-              style={{
-                position: "absolute",
-                top: index * 50,
-                zIndex: 0
-              }}
-              key={`${card.number} + ${card.mark}`}
-            >
-              <View style={{ position: "relative", zIndex: 0 }}>
-                <TrumpCard
-                  columnNumber={columnIndex}
-                  number={card?.number ?? "jocker"}
-                  mark={card?.mark}
-                  scale={70}
-                  joinMethod={join}
-                />
-              </View>
-            </View>
-          );
+          if (index != undefined) {
+            return (
+              <TrumpCard
+                columnNumber={columnIndex}
+                number={card?.number ?? "jocker"}
+                mark={card?.mark}
+                scale={70}
+                joinMethod={join}
+                index={index}
+                key={`${card.number} + ${card.mark}`}
+              />
+            );
+          } else {
+            return <></>;
+          }
         })}
       </View>
     </>

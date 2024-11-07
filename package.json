@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
+    "eas:android:build": "eas build --platform android",
     "fmt": "prettier --write './**/*.{js,ts,tsx,jsx}'"
   },
   "jest": {

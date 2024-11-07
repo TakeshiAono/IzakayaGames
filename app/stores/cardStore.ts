@@ -63,7 +63,6 @@ export default class CardStore {
       cards[i] = cards[r];
       cards[r] = tmp;
     }
-    console.log("しゃっふるしたcards", cards);
     this.cards = cards;
   }
 
@@ -81,14 +80,12 @@ export default class CardStore {
   private createDeckOfCards() {
     const cards: TrampCard[] = [];
     for (let i = 1; i <= 13; i++) {
-      console.log("i", i);
       cards.push({ type: "cards-spade", number: i });
       cards.push({ type: "diamond", number: i });
       cards.push({ type: "cards-club", number: i });
       cards.push({ type: "heart", number: i });
     }
     cards.push({ type: "joker", number: null });
-    console.log("cards", cards);
     this.cards = cards;
   }
 

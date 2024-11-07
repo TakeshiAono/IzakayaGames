@@ -1,9 +1,4 @@
-import {
-  Button,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect, useRef, useState } from "react";
 import TrumpCard from "@/components/TrumpCard";
@@ -85,7 +80,7 @@ const SolitaireScreen = observer(() => {
                 return (
                   <View
                     key={dealtCards.id}
-                    style={{ flex: 1, zIndex: index == 0 ? 1 : 0 }}
+                    style={{ flex: 1 }}
                     ref={(c) => {
                       if (c && !viewRefs.current.includes(c)) {
                         // 重複追加を防ぐ
@@ -97,7 +92,6 @@ const SolitaireScreen = observer(() => {
                       cardStore.setCardCoordinates(cardCoordinates);
                     }}
                   >
-                    <Text>{dealtCards.cards.length}</Text>
                     <TrumpColumn
                       columnIndex={+dealtCards.id}
                       // TODO: スプレッド構文使わなくても良くなるように修正
@@ -115,7 +109,7 @@ const SolitaireScreen = observer(() => {
                 alignItems: "flex-end",
               }}
             >
-              <TrumpCard isHide={true} scale={120} />
+              {/* <TrumpCard isHide={true} scale={120} /> */}
             </View>
           </View>
         </ScrollView>
