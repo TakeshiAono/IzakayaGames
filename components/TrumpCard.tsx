@@ -92,7 +92,7 @@ const TrumpCard = observer(
           maxTranslateY,
         );
       })
-      .onEnd((e) => {
+      .onFinalize((e) => {
         cardStore.setActiveColumnNumber(null);
 
         zIndex.value = 0;
