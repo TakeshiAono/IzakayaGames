@@ -137,4 +137,40 @@ export default class CardStore {
   public get getDealtCardsList() {
     return this.dealtCardsList;
   }
+
+  private descendingOrderAndColorAlternatingGrouping(cardList: TrampCard[]) {
+    return this.descendingOrderGrouping(cardList);
+  }
+
+  private descendingOrderGrouping(originList: TrampCard[]) {
+    let index = 0;
+    const groupedList: (TrampCard | TrampCard[])[] = []
+    let tempGroup: TrampCard[] = []
+    _.forEach<TrampCard>(
+      originList,
+      _ => {
+        if(originList[index + 1] === undefined) {
+          if(tempGroup.length > 0) {
+            tempGroup.push(originList[index])
+            groupedList.push(tempGroup)
+          } else {
+            groupedList.push(originList[index])
+          }
+        } else if(originList[index + 1] !== undefined && originList[index].number - 1 === originList[index + 1].number) {
+          tempGroup.push(originList[index])
+          index++
+        } else {
+          if(tempGroup.length > 0) {
+            tempGroup.push(originList[index])
+            groupedList.push(tempGroup)
+          } else {
+            groupedList.push(originList[index])
+          }
+          tempGroup = []
+          index++
+        }
+      }
+    );
+    return groupedList
+  }
 }
