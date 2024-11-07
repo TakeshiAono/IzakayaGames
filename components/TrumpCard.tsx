@@ -75,6 +75,7 @@ const TrumpCard = observer(
         zIndex.value = 50;
         prevTranslationX.value = translationX.value;
         prevTranslationY.value = translationY.value;
+        cardStore.setActiveColumnNumber(columnNumber);
       })
       .onUpdate((event) => {
         const maxTranslateX = width / 2 + 1000;
@@ -92,6 +93,8 @@ const TrumpCard = observer(
         );
       })
       .onEnd((e) => {
+        cardStore.setActiveColumnNumber(null);
+
         zIndex.value = 0;
         cardStore.cardCoordinates.forEach((cardCoordinate) => {
           if (

@@ -1,7 +1,6 @@
-import { Button, ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, View } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect, useRef, useState } from "react";
-import TrumpCard from "@/components/TrumpCard";
 import TrumpColumn from "@/components/solitair/TrumpColumn";
 import React from "react";
 import { cardStore } from "../_layout";
@@ -10,9 +9,7 @@ import { observer } from "mobx-react-lite";
 
 const SolitaireScreen = observer(() => {
   const splitNumber = 4;
-
   const [gameVisible, setGameVisible] = useState(false);
-
   const viewRefs = useRef<View[]>([]);
 
   const measure = async (
@@ -80,7 +77,15 @@ const SolitaireScreen = observer(() => {
                 return (
                   <View
                     key={dealtCards.id}
-                    style={{ flex: 1 }}
+                    style={{
+                      flex: 1,
+                      zIndex:
+                        cardStore.activeColumnNumber != null
+                          ? cardStore.activeColumnNumber == index.toString()
+                            ? 99
+                            : 0
+                          : 0,
+                    }}
                     ref={(c) => {
                       if (c && !viewRefs.current.includes(c)) {
                         // 重複追加を防ぐ

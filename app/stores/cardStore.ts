@@ -27,6 +27,9 @@ export default class CardStore {
   dealtCardsList!: DealtCards[];
 
   @observable
+  activeColumnNumber!: string | null;
+
+  @observable
   cardCoordinates!: CardCoordinate[];
 
   constructor() {
@@ -38,6 +41,7 @@ export default class CardStore {
   public initialize() {
     this.createDeckOfCards();
     this.cardCoordinates = [];
+    this.activeColumnNumber = null;
   }
 
   @action
@@ -52,6 +56,11 @@ export default class CardStore {
   @action
   public setCardCoordinates(cardCoordinates: CardCoordinate[]) {
     this.cardCoordinates = cardCoordinates;
+  }
+
+  @action
+  public setActiveColumnNumber(columnNumber: string | null) {
+    this.activeColumnNumber = columnNumber;
   }
 
   @action

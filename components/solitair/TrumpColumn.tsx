@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import TrumpCard from "../TrumpCard";
 import React, { useRef } from "react";
 
@@ -22,7 +22,6 @@ const TrumpColumn = ({ cards, columnIndex }: Props) => {
           width: 100,
         }}
       >
-        <Text>{columnIndex}</Text>
         {cards.map((card, index) => {
           if (index != undefined) {
             return (
