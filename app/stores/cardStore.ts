@@ -138,39 +138,56 @@ export default class CardStore {
     return this.dealtCardsList;
   }
 
-  private descendingOrderAndColorAlternatingGrouping(cardList: TrampCard[]) {
-    return this.descendingOrderGrouping(cardList);
+  private descendingOrderAndColorAlternatingGrouping(originList: TrampCard[]) {
+    let index = 0;
+    const groupedList: (TrampCard | TrampCard[])[] = [];
+    let tempGroup: TrampCard[] = [];
+    _.forEach<TrampCard>(originList, (_) => {
+      if (originList[index + 1] === undefined) {
+        // NOTE: 最後の要素の時
+        if (tempGroup.length > 0) {
+          tempGroup.push(originList[index]);
+          groupedList.push(tempGroup);
+        } else {
+          groupedList.push(originList[index]);
+        }
+      } else if (
+        // NOTE: 最後の要素ではない、かつ次の要素が連番の時、かつ次の要素が同じ色でない時
+        originList[index + 1] !== undefined &&
+        originList[index].number - 1 === originList[index + 1].number &&
+        this.isNotSerialSameColorCard(originList[index], originList[index + 1])
+      ) {
+        console.log("該当した", originList[index], originList[index + 1]);
+        tempGroup.push(originList[index]);
+        index++;
+      } else {
+        // NOTE: 最後の要素ではない、かつ次の要素が連番ではない時、または次の要素が同じ色の時
+        if (tempGroup.length > 0) {
+          tempGroup.push(originList[index]);
+          groupedList.push(tempGroup);
+        } else {
+          groupedList.push(originList[index]);
+        }
+        tempGroup = [];
+        index++;
+      }
+    });
+    return groupedList;
   }
 
-  private descendingOrderGrouping(originList: TrampCard[]) {
-    let index = 0;
-    const groupedList: (TrampCard | TrampCard[])[] = []
-    let tempGroup: TrampCard[] = []
-    _.forEach<TrampCard>(
-      originList,
-      _ => {
-        if(originList[index + 1] === undefined) {
-          if(tempGroup.length > 0) {
-            tempGroup.push(originList[index])
-            groupedList.push(tempGroup)
-          } else {
-            groupedList.push(originList[index])
-          }
-        } else if(originList[index + 1] !== undefined && originList[index].number - 1 === originList[index + 1].number) {
-          tempGroup.push(originList[index])
-          index++
-        } else {
-          if(tempGroup.length > 0) {
-            tempGroup.push(originList[index])
-            groupedList.push(tempGroup)
-          } else {
-            groupedList.push(originList[index])
-          }
-          tempGroup = []
-          index++
-        }
-      }
+  private isNotSerialSameColorCard(
+    currentCard: TrampCard,
+    nextCard: TrampCard,
+  ) {
+    return !(
+      (currentCard.type === "cards-club" && nextCard.type === "cards-club") ||
+      (currentCard.type === "cards-club" && nextCard.type === "cards-spade") ||
+      (currentCard.type === "cards-spade" && nextCard.type === "cards-club") ||
+      (currentCard.type === "cards-spade" && nextCard.type === "cards-spade") ||
+      (currentCard.type === "diamond" && nextCard.type === "diamond") ||
+      (currentCard.type === "diamond" && nextCard.type === "heart") ||
+      (currentCard.type === "heart" && nextCard.type === "diamond") ||
+      (currentCard.type === "heart" && nextCard.type === "heart")
     );
-    return groupedList
   }
 }
