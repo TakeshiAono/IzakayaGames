@@ -30,6 +30,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   addToCardColumns: (newCardPosX: number, newCardPosY: number) => void;
   index: number;
+  reversIndex: number;
 };
 
 const MarkColorMap = {
@@ -54,6 +55,7 @@ const TrumpCard = observer(
     style,
     isHide = false,
     index,
+    reversIndex,
   }: Props) => {
     const translationX = useSharedValue(0);
     const translationY = useSharedValue(0);
@@ -116,7 +118,7 @@ const TrumpCard = observer(
       })
       .runOnJS(true);
 
-    return (
+    return reversIndex == 0 ? (
       <GestureDetector key={`${number}` + columnNumber} gesture={pan}>
         <Animated.View
           style={[
@@ -173,6 +175,61 @@ const TrumpCard = observer(
           </Card>
         </Animated.View>
       </GestureDetector>
+    ) : (
+      <Animated.View
+        style={[
+          { flex: 1, position: "absolute", top: index * 50 },
+          animatedStyles,
+        ]}
+      >
+        <Card containerStyle={{ width: scale ?? 200 }}>
+          <Text>{JSON.stringify(style)}</Text>
+          {!isHide ? (
+            <>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ color: MarkColorMap[mark], fontSize: 15 }}>
+                  {number}
+                </Text>
+                {mark === "cards-club" || mark === "cards-spade" ? (
+                  <Icon2 name={mark} size={15} color={MarkColorMap[mark]} />
+                ) : (
+                  <Icon name={mark} size={15} color={MarkColorMap[mark]} />
+                )}
+              </View>
+              <View
+                style={{
+                  height: scale ? scale * 1.5 : 300,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: MarkColorMap[mark], fontSize: 30 }}>
+                  {number}
+                </Text>
+                {mark === "cards-club" || mark === "cards-spade" ? (
+                  <Icon2 name={mark} size={30} color={"black"} />
+                ) : (
+                  <Icon name={mark} size={30} color={MarkColorMap[mark]} />
+                )}
+              </View>
+            </>
+          ) : (
+            <>
+              <ImageBackground
+                // source={{ uri: backFaceImage }}
+                resizeMode="repeat" // 'cover' で画像が画面全体を覆うようにリサイズ
+              >
+                <View
+                  style={{
+                    height: scale ? scale * 1.5 + 15 : 300 + 15,
+                  }}
+                ></View>
+              </ImageBackground>
+            </>
+          )}
+        </Card>
+      </Animated.View>
     );
   },
 );

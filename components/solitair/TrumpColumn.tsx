@@ -32,7 +32,7 @@ const TrumpColumn = ({ cards, columnIndex }: Props) => {
                 scale={70}
                 joinMethod={join}
                 index={index}
-                key={`${card.number} + ${card.mark}`}
+                reversIndex={(cards.length - 1) - index}
               />
             );
           } else {
