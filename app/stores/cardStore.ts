@@ -106,36 +106,62 @@ export default class CardStore {
     toDealtCardsId: string,
     trampCard: TrampCard,
   ) {
-    const removeToCards = this.dealtCardsList.filter(
-      (dealtCards) => dealtCards.id == fromDealtCardsId,
-    );
-    const addToCards = this.dealtCardsList.filter(
+    const findCards = this.dealtCardsList.find(
       (dealtCards) => dealtCards.id == toDealtCardsId,
     );
-    if (removeToCards.length === 0 || addToCards.length === 0) return;
-    const otherCardsList = this.dealtCardsList.filter(
-      (dealtCards) =>
-        dealtCards.id != fromDealtCardsId && dealtCards.id != toDealtCardsId,
-    );
+    if (findCards === undefined) return false;
+    const lastCard = _.last(findCards.cards);
+    if (lastCard === undefined) return false;
 
-    const addedCards = [...addToCards[0].cards, trampCard];
-    const deletedCards = removeToCards[0].cards.filter(
-      (card) =>
-        !(card.type == trampCard.type && card.number == trampCard.number),
-    );
+    if (
+      this.isEmptyCards(toDealtCardsId) ||
+      this.isDescendingOrderAndColorAlternating(lastCard, trampCard)
+    ) {
+      const removeToCards = this.dealtCardsList.filter(
+        (dealtCards) => dealtCards.id == fromDealtCardsId,
+      );
+      const addToCards = this.dealtCardsList.filter(
+        (dealtCards) => dealtCards.id == toDealtCardsId,
+      );
+      if (removeToCards.length === 0 || addToCards.length === 0) return;
+      const otherCardsList = this.dealtCardsList.filter(
+        (dealtCards) =>
+          dealtCards.id != fromDealtCardsId && dealtCards.id != toDealtCardsId,
+      );
 
-    // NOTE: このソートをしなければcardsの順番が変わってしまう
-    const tempList = [
-      ...otherCardsList,
-      { id: removeToCards[0].id, cards: deletedCards },
-      { id: addToCards[0].id, cards: addedCards },
-    ];
-    this.dealtCardsList = _.sortBy(tempList, (cards) => parseInt(cards.id));
+      const addedCards = [...addToCards[0].cards, trampCard];
+      const deletedCards = removeToCards[0].cards.filter(
+        (card) =>
+          !(card.type == trampCard.type && card.number == trampCard.number),
+      );
+
+      // NOTE: このソートをしなければcardsの順番が変わってしまう
+      const tempList = [
+        ...otherCardsList,
+        { id: removeToCards[0].id, cards: deletedCards },
+        { id: addToCards[0].id, cards: addedCards },
+      ];
+      this.dealtCardsList = _.sortBy(tempList, (cards) => parseInt(cards.id));
+    }
   }
 
   @computed
   public get getDealtCardsList() {
     return this.dealtCardsList;
+  }
+
+  private isEmptyCards(toDealtCardsId: string) {
+    const findCards = this.dealtCardsList.find(
+      (dealtCards) => dealtCards.id == toDealtCardsId,
+    );
+    if (findCards === undefined) return false;
+    return findCards.cards.length === 0;
+  }
+
+  private isDescendingCards(currentCard: TrampCard, nextCard: TrampCard) {
+    if (currentCard.number === null || nextCard.number === null) return false;
+
+    return currentCard.number - 1 === nextCard.number;
   }
 
   private descendingOrderAndColorAlternatingGrouping(originList: TrampCard[]) {
@@ -154,10 +180,11 @@ export default class CardStore {
       } else if (
         // NOTE: 最後の要素ではない、かつ次の要素が連番の時、かつ次の要素が同じ色でない時
         originList[index + 1] !== undefined &&
-        originList[index].number - 1 === originList[index + 1].number &&
-        this.isNotSerialSameColorCard(originList[index], originList[index + 1])
+        this.isDescendingOrderAndColorAlternating(
+          originList[index],
+          originList[index + 1],
+        )
       ) {
-        console.log("該当した", originList[index], originList[index + 1]);
         tempGroup.push(originList[index]);
         index++;
       } else {
@@ -173,6 +200,16 @@ export default class CardStore {
       }
     });
     return groupedList;
+  }
+
+  private isDescendingOrderAndColorAlternating(
+    currentCard: TrampCard,
+    nextCard: TrampCard,
+  ) {
+    return (
+      this.isDescendingCards(currentCard, nextCard) &&
+      this.isNotSerialSameColorCard(currentCard, nextCard)
+    );
   }
 
   private isNotSerialSameColorCard(
