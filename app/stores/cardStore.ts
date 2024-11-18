@@ -6,6 +6,13 @@ export type TrampCard = {
   number: number | null;
 };
 
+export const MarkColorMap = {
+  heart: "red",
+  diamond: "red",
+  "cards-club": "black",
+  "cards-spade": "black",
+} as const;
+
 export type DealtCards = {
   id: string;
   cards: TrampCard[];
@@ -17,6 +24,10 @@ export type CardCoordinate = {
   yHead: number;
   xBottom: number;
   yBottom: number;
+};
+export type DumpSolitaireCard = {
+  type: string;
+  number: number;
 };
 
 export default class CardStore {
@@ -32,6 +43,14 @@ export default class CardStore {
   @observable
   cardCoordinates!: CardCoordinate[];
 
+  @observable
+  dumpSolitaireCardsList!: [
+    { cardAreaType: "cards-spade"; card: TrampCard } | null,
+    { cardAreaType: "diamond"; card: TrampCard } | null,
+    { cardAreaType: "cards-club"; card: TrampCard } | null,
+    { cardAreaType: "heart"; card: TrampCard } | null,
+  ];
+
   constructor() {
     makeAutoObservable(this);
     this.initialize();
@@ -42,6 +61,8 @@ export default class CardStore {
     this.createDeckOfCards();
     this.cardCoordinates = [];
     this.activeColumnNumber = null;
+    this.dealtCardsList = [];
+    this.dumpSolitaireCardsList = [null, null, null, null];
   }
 
   @action
@@ -50,7 +71,9 @@ export default class CardStore {
       this.cards = this.cards.filter((card) => card.type !== "joker");
     }
     this.deckShuffle();
-    this.deal(splitNumber);
+    for (let i = 0; i < splitNumber; i++) {
+      this.distributeCards(i + 1, i.toString());
+    }
   }
 
   @action
@@ -86,6 +109,20 @@ export default class CardStore {
   }
 
   @action
+  public distributeCards(distributeNumber: number, index: string) {
+    const distributeCards = this.cards.slice(0, distributeNumber);
+
+    this.cards = this.cards.slice(distributeNumber);
+    this.dealtCardsList = [
+      ...this.dealtCardsList,
+      {
+        id: index,
+        cards: distributeCards,
+      },
+    ];
+  }
+
+  @action
   private createDeckOfCards() {
     const cards: TrampCard[] = [];
     for (let i = 1; i <= 13; i++) {
@@ -106,11 +143,11 @@ export default class CardStore {
     toDealtCardsId: string,
     trampCard: TrampCard,
   ) {
-    const findCards = this.dealtCardsList.find(
+    const findToCards = this.dealtCardsList.find(
       (dealtCards) => dealtCards.id == toDealtCardsId,
     );
-    if (findCards === undefined) return false;
-    const lastCard = _.last(findCards.cards);
+    if (findToCards === undefined) return false;
+    const lastCard = _.last(findToCards.cards);
     if (lastCard === undefined) return false;
 
     if (
