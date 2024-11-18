@@ -26,13 +26,14 @@ const TrumpColumn = ({ cards, columnIndex }: Props) => {
           if (index != undefined) {
             return (
               <TrumpCard
-                columnNumber={columnIndex}
-                number={card?.number ?? "jocker"}
+                columnNumber={columnIndex.toString()}
+                number={card?.number}
                 mark={card?.mark}
                 scale={70}
                 joinMethod={join}
                 index={index}
-                reversIndex={(cards.length - 1) - index}
+                reversIndex={cards.length - 1 - index}
+                key={`${card?.number} + ${card?.mark}`}
               />
             );
           } else {

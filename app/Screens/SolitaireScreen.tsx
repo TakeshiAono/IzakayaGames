@@ -6,9 +6,10 @@ import React from "react";
 import { cardStore } from "../_layout";
 import { CardCoordinate, DealtCards } from "../stores/cardStore";
 import { observer } from "mobx-react-lite";
+import DumpCardArea from "@/components/solitair/DumpCardArea";
 
 const SolitaireScreen = observer(() => {
-  const splitNumber = 4;
+  const splitNumber = 7;
   const [gameVisible, setGameVisible] = useState(false);
   const viewRefs = useRef<View[]>([]);
 
@@ -70,54 +71,78 @@ const SolitaireScreen = observer(() => {
           />
         </View>
       ) : (
-        <ScrollView contentContainerStyle={{ height: 1000 }}>
-          <View style={{ justifyContent: "space-between", flex: 1 }}>
-            <View style={{ flexDirection: "row", flex: 1 }}>
-              {cardStore.getDealtCardsList.map((dealtCards, index) => {
-                return (
-                  <View
-                    key={dealtCards.id}
-                    style={{
-                      flex: 1,
-                      zIndex:
-                        cardStore.activeColumnNumber != null
-                          ? cardStore.activeColumnNumber == index.toString()
-                            ? 99
-                            : 0
-                          : 0,
-                    }}
-                    ref={(c) => {
-                      if (c && !viewRefs.current.includes(c)) {
-                        // 重複追加を防ぐ
-                        viewRefs.current.push(c);
-                      }
-                    }}
-                    onLayout={async () => {
-                      const cardCoordinates = await measure(+dealtCards.id);
-                      cardStore.setCardCoordinates(cardCoordinates);
-                    }}
-                  >
-                    <TrumpColumn
-                      columnIndex={+dealtCards.id}
-                      // TODO: スプレッド構文使わなくても良くなるように修正
-                      cards={convertCard(dealtCards)}
-                    />
-                  </View>
-                );
-              })}
+        <View>
+          <ScrollView contentContainerStyle={{ height: 1000, zIndex: 5 }}>
+            <View style={{ justifyContent: "space-between", flex: 1 }}>
+              <View style={{ flexDirection: "row", flex: 1 }}>
+                {cardStore.getDealtCardsList.map((dealtCards, index) => {
+                  return (
+                    <View
+                      key={dealtCards.id}
+                      style={{
+                        flex: 1,
+                        zIndex:
+                          cardStore.activeColumnNumber != null
+                            ? cardStore.activeColumnNumber == index.toString()
+                              ? 99
+                              : 0
+                            : 0,
+                      }}
+                      ref={(c) => {
+                        if (c && !viewRefs.current.includes(c)) {
+                          // 重複追加を防ぐ
+                          viewRefs.current.push(c);
+                        }
+                      }}
+                      onLayout={async () => {
+                        const cardCoordinates = await measure(+dealtCards.id);
+                        cardStore.setCardCoordinates(cardCoordinates);
+                      }}
+                    >
+                      <TrumpColumn
+                        columnIndex={+dealtCards.id}
+                        // TODO: スプレッド構文使わなくても良くなるように修正
+                        cards={convertCard(dealtCards)}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                }}
+              >
+                {/* <TrumpCard isHide={true} scale={120} /> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-              }}
-            >
-              {/* <TrumpCard isHide={true} scale={120} /> */}
+          </ScrollView>
+          <View
+            style={{
+              flexDirection: "row",
+              position: "absolute",
+              zIndex: 1,
+              bottom: 0,
+              left: 0,
+            }}
+          >
+            <View style={{ margin: 5 }}>
+              <DumpCardArea mark={"heart"} />
+            </View>
+            <View style={{ margin: 5 }}>
+              <DumpCardArea mark={"diamond"} />
+            </View>
+            <View style={{ margin: 5 }}>
+              <DumpCardArea mark={"cards-spade"} />
+            </View>
+            <View style={{ margin: 5 }}>
+              <DumpCardArea mark={"cards-club"} />
             </View>
           </View>
-        </ScrollView>
+        </View>
       )}
     </>
   );

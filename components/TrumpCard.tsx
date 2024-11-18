@@ -19,26 +19,19 @@ import Animated, {
 import { observer } from "mobx-react-lite";
 
 import { cardStore } from "@/app/_layout";
-import { TrampCard } from "@/app/stores/cardStore";
+import { MarkColorMap, TrampCard } from "@/app/stores/cardStore";
 
 type Props = {
   number: number;
-  columnNumber: string;
+  columnNumber?: string;
   mark: TrampCard["type"];
   scale?: number;
   isHide?: boolean;
   style?: StyleProp<ViewStyle>;
-  addToCardColumns: (newCardPosX: number, newCardPosY: number) => void;
-  index: number;
-  reversIndex: number;
+  addToCardColumns?: (newCardPosX: number, newCardPosY: number) => void;
+  index?: number;
+  reversIndex?: number;
 };
-
-const MarkColorMap = {
-  heart: "red",
-  diamond: "red",
-  "cards-club": "black",
-  "cards-spade": "black",
-} as const;
 
 const { width, height } = Dimensions.get("screen");
 
