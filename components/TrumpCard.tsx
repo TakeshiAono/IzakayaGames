@@ -111,8 +111,17 @@ const TrumpCard = observer(
       })
       .runOnJS(true);
 
+    const doubleTapGesture = Gesture.Tap()
+      .numberOfTaps(2)
+      .onEnd(() => {
+        cardStore.addDumpSolitaireCardList({ type: mark, number }, columnNumber);
+      })
+      .runOnJS(true);
+
+    const combinedGesture = Gesture.Exclusive(doubleTapGesture, pan);
+
     return reversIndex == 0 ? (
-      <GestureDetector key={`${number}` + columnNumber} gesture={pan}>
+      <GestureDetector key={`${number}` + columnNumber} gesture={combinedGesture}>
         <Animated.View
           style={[
             { flex: 1, position: "absolute", top: index * 50 },

@@ -45,10 +45,10 @@ export default class CardStore {
 
   @observable
   dumpSolitaireCardsList!: [
-    { cardAreaType: "cards-spade"; card: TrampCard } | null,
-    { cardAreaType: "diamond"; card: TrampCard } | null,
-    { cardAreaType: "cards-club"; card: TrampCard } | null,
-    { cardAreaType: "heart"; card: TrampCard } | null,
+    { cardAreaType: "cards-spade"; card: TrampCard | null },
+    { cardAreaType: "diamond"; card: TrampCard | null },
+    { cardAreaType: "cards-club"; card: TrampCard | null },
+    { cardAreaType: "heart"; card: TrampCard | null },
   ];
 
   constructor() {
@@ -62,7 +62,51 @@ export default class CardStore {
     this.cardCoordinates = [];
     this.activeColumnNumber = null;
     this.dealtCardsList = [];
-    this.dumpSolitaireCardsList = [null, null, null, null];
+    this.dumpSolitaireCardsList = [
+      { cardAreaType: "cards-spade", card: null },
+      { cardAreaType: "diamond", card: null },
+      { cardAreaType: "cards-club", card: null },
+      { cardAreaType: "heart", card: null },
+    ];
+  }
+
+  @action
+  public addDumpSolitaireCardList(card: TrampCard, columnNumber: string) {
+    if(this.isAddableDumpSolitaireCardList(card)) {
+      const [matchingRecords, otherRecords] = _.partition(
+        this.dumpSolitaireCardsList,
+        (cardList) => cardList.cardAreaType === card.type
+      );
+      matchingRecords[0].card = card
+
+      const [remainingCards, popCard] = _.partition(this.dealtCardsList, predicate => predicate.id === columnNumber)
+      this.dumpSolitaireCardsList = [...remainingCards, ...matchingRecords]
+      this.removeFromDealtCards(card, columnNumber)
+    }
+  }
+
+  private removeFromDealtCards(removeCard: TrampCard, columnNumber: string) {
+    const [targetCards, remainingCards] = _.partition(this.dealtCardsList, (dealtCards) => dealtCards.id == columnNumber);
+    const mutatedCards = targetCards[0].cards.filter(card => card.type !== removeCard.type && card.number !== removeCard.number)
+    this.dealtCardsList = [...remainingCards, { id: columnNumber, cards: mutatedCards }]
+    this.dealtCardsList = _.sortBy(this.dealtCardsList, (cards) => parseInt(cards.id));
+  }
+
+  private isAddableDumpSolitaireCardList(addCard: TrampCard) {
+    const targetCardList = this.dumpSolitaireCardsList.find(cardList => cardList.cardAreaType === addCard.type)
+
+    // NOTE: カードがまだストックされてない状態
+    if (targetCardList?.card === null && addCard.number === 1) {
+      return true
+    }
+
+    if (
+      addCard.number != null && // NOTE: nullガード
+      targetCardList?.card?.number === addCard.number - 1) {
+      return true
+    }
+
+    return false
   }
 
   @action

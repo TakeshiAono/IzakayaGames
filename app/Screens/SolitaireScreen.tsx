@@ -130,16 +130,16 @@ const SolitaireScreen = observer(() => {
             }}
           >
             <View style={{ margin: 5 }}>
-              <DumpCardArea mark={"heart"} />
+              <DumpCardArea mark={"heart"} number={cardStore.dumpSolitaireCardsList.find(cardList => cardList.cardAreaType == "heart")?.card?.number} />
             </View>
             <View style={{ margin: 5 }}>
-              <DumpCardArea mark={"diamond"} />
+              <DumpCardArea mark={"diamond"} number={cardStore.dumpSolitaireCardsList.find(cardList => cardList.cardAreaType == "diamond")?.card?.number} />
             </View>
             <View style={{ margin: 5 }}>
-              <DumpCardArea mark={"cards-spade"} />
+              <DumpCardArea mark={"cards-spade"} number={cardStore.dumpSolitaireCardsList.find(cardList => cardList.cardAreaType == "cards-spade")?.card?.number} />
             </View>
             <View style={{ margin: 5 }}>
-              <DumpCardArea mark={"cards-club"} />
+              <DumpCardArea mark={"cards-club"} number={cardStore.dumpSolitaireCardsList.find(cardList => cardList.cardAreaType == "cards-club")?.card?.number} />
             </View>
           </View>
         </View>
