@@ -25,6 +25,7 @@ export type CardCoordinate = {
   xBottom: number;
   yBottom: number;
 };
+
 export type DumpSolitaireCard = {
   type: string;
   number: number;
@@ -150,6 +151,31 @@ export default class CardStore {
     this.dealtCardsList = _.chunk(cards, chunkSize).map((cards, index) => {
       return { id: index.toString(), cards };
     });
+  }
+
+  @action
+  public dealOne(targetDealCardId?: number) {
+    if(targetDealCardId) {
+      const [targetCard, ...remainingCards] = this.cards
+      this.cards = remainingCards
+    } else {
+      let dealCards: TrampCard[] = []
+      let remainingCards: TrampCard[] = []
+      if(this.cards.length < this.dealtCardsList.length) {
+        // 配るカードが足りない場合
+        dealCards = this.cards
+        remainingCards = []
+      } else {
+        dealCards = this.cards.slice(0, this.dealtCardsList.length)
+        remainingCards = this.cards.slice(this.dealtCardsList.length, this.cards.length)
+      }
+
+      this.cards = remainingCards
+      const newDealtCardsList = this.dealtCardsList.map((dealtCards, index) => {
+        return { id: dealtCards.id, cards: dealCards[index] ? dealtCards.cards.concat(dealCards[index]) : dealtCards.cards}
+      })
+      this.dealtCardsList = newDealtCardsList
+    }
   }
 
   @action

@@ -1,12 +1,14 @@
 import { Button, ScrollView, View } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect, useRef, useState } from "react";
-import TrumpColumn from "@/components/solitair/TrumpColumn";
 import React from "react";
+import { observer } from "mobx-react-lite";
+
+import TrumpColumn from "@/components/solitair/TrumpColumn";
 import { cardStore } from "../_layout";
 import { CardCoordinate, DealtCards } from "../stores/cardStore";
-import { observer } from "mobx-react-lite";
 import DumpCardArea from "@/components/solitair/DumpCardArea";
+import UndersideTrumpCard from "@/components/UndersideTrumpCard";
 
 const SolitaireScreen = observer(() => {
   const splitNumber = 7;
@@ -127,6 +129,9 @@ const SolitaireScreen = observer(() => {
               zIndex: 1,
               bottom: 0,
               left: 0,
+              alignItems: "flex-end",
+              backgroundColor: "white",
+              width: "100%",
             }}
           >
             <View style={{ margin: 5 }}>
@@ -140,6 +145,10 @@ const SolitaireScreen = observer(() => {
             </View>
             <View style={{ margin: 5 }}>
               <DumpCardArea mark={"cards-club"} number={cardStore.dumpSolitaireCardsList.find(cardList => cardList.cardAreaType == "cards-club")?.card?.number} />
+            </View>
+            <View style={{justifyContent: "flex-end", marginLeft: "auto", marginRight: 20}}>
+              {/* 裏向きのトランプカードを表示させたいだけなのでprposはダミー値 */}
+              <UndersideTrumpCard scale={50}/>
             </View>
           </View>
         </View>
